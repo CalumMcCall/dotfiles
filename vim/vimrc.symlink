@@ -1,4 +1,105 @@
-syntax on
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+"neocomplete settings
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+"let g:neocomplete#force_omni_input_patterns.scala = '\k\.\k*'
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <expr><C-h>     neocomplete#close_popup()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  "return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+"fix extra space around gvim in xmonad
+set guiheadroom=0
+
+syntax on
+set hlsearch
+set guifont=Inconsolata\ 12
+set background=dark
+set tags=./tags;/
+set completeopt=menu,preview
+let g:solarized_italic=0
+colorscheme solarized
+filetype plugin indent on
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set softtabstop=2
+"this line makes escape remove highlighting from last search
+nnoremap <esc> :noh<return><esc>
+"Defines 'Space2Tab' which converts all leading spaces to tabs
+:command! -range=% -nargs=0 Space2Tab execute '<line1>,<line2>s#^\(
+\{'.&ts.'\}\)\+#\=repeat("\t", len(submatch(0))/' . &ts . ')'
+"Save backup files to a directory instead of littering the sourcetree
+set backupdir=$HOME/.vimtmp,.
+set directory=$HOME/.vimtmp,.
+set ve=all "enable placing the cursor anywhere in the file
+set textwidth=100
+set formatoptions+=t
+"open tag in vsplit
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+"always change vim's dir to the dir of the current file
+set autochdir
+"backspace through anything in insert mode
+set backspace=indent,eol,start
+"start searching before pressing enter
+set incsearch
+"set whitespace visible and pretty
+set list
+if &listchars ==# 'eol:$'
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+endif
+set scrolloff=1
+
+set guioptions-=m  "remove menu bar
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+set guioptions-=L  "remove left-hand scroll bar
+
+"make scala syntax highlighting work
+autocmd BufRead,BufNewFile *.scala set filetype=scala
+
+"load module for fuzzy search
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+if executable('ag')
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+
+"autoreload file on change
+"This is useful when a file is open in vim that git has changed
+set autoread
+
+"auto format rust code on buffer save
+let g:rustfmt_autosave = 0
+
+"use pathogen to manage plugins
+execute pathogen#infect()

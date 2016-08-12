@@ -1,0 +1,21 @@
+import XMonad
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Actions.SpawnOn
+import qualified XMonad.StackSet as W
+
+main = xmonad $ ewmh defaultConfig{ handleEventHook =
+       handleEventHook defaultConfig <+> fullscreenEventHook,
+       terminal = "xfce4-terminal --hide-menubar",
+       modMask = mod4Mask,
+       startupHook = do
+        spawnOn "1" "chromium"
+        spawnOn "4" "xfce4-terminal"
+        spawnOn "6" "thunderbird"
+        spawnOn "7" "~/pkgbuilddir/qnv/qnv"
+        spawnOn "7" "xfce4-terminal --command=irssi"}
+
+--spawnToWorkspace :: String -> String -> X ()
+--spawnToWorkspace program workspace = do
+--                                      spawn program
+--                                      windows $ W.greedyView workspace
+--
