@@ -5,7 +5,6 @@ DEFAULT_USER="calumm"
 export PYTHONUNBUFFERED=true
 export EDITOR="gvim"
 export XDG_CONFIG_HOME=/home/calumm/.config
-export DOCKER_PASSWORD=***REMOVED***
 export KEYTIMEOUT=1
 
 # Set name of the theme to load.
